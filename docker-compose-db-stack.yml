@@ -12,7 +12,7 @@ services:
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
     ports:
-      - '3306:3306'
+      - "${DB_PORT_MYSQL}:3306"
     volumes:
       - mysql8-db-data:/var/lib/mysql
       - ./mysql8/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -29,7 +29,7 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "${DB_PORT_POSTGRES}:5432"
     volumes:
       - postgres-db-data:/var/lib/postgresql/data
 
@@ -44,9 +44,23 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=${DB_PASSWORD}
     ports:
-      - "1433:1433"
+      - "${DB_PORT_SQLSERVER}:1433"
     volumes:
       - sqlserver-data:/var/opt/mssql
+
+  mongodb:
+    container_name: "mongodb-service"
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "${DB_PORT_MONGODB}:27017"
+    volumes:
+      - mongodb-data:/data/db
 
 volumes:
   mysql8-db-data:
@@ -54,4 +68,6 @@ volumes:
   postgres-db-data:
     driver: local
   sqlserver-data:
+    driver: local
+  mongodb-data:
     driver: local
