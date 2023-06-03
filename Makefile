@@ -1,6 +1,7 @@
 RUN=docker run
 STOP=docker stop
 DB_STACK=docker compose -f docker-compose-db-stack.yml
+WEB_STACK=docker compose -f docker-compose-web-stack.yml
 
 db-stack-up:
 	@$(DB_STACK) up --build --remove-orphans
@@ -46,3 +47,9 @@ mongo-start:
 
 mongo-stop:
 	@$(DB_STACK) stop mongodb
+
+nginx-start:
+	@$(WEB_STACK) up nginx
+
+nginx-stop:
+	@$(WEB_STACK) stop nginx
