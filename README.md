@@ -1,6 +1,10 @@
-# container-stacks
+# Container Stacks
 
 Este projeto contém *stacks* de containers usados no dia a dia para desenvolvimento de projetos. Ele concentra serviços que são usados rotineiramente.
+
+## Porque isso?
+
+Eu não preciso dessas instalações *stand-alone* na minha máquina local, então eu estou o tempo todos manipulando estes serviços para usar localmente.
 
 ## Como usar isto
 
@@ -16,3 +20,11 @@ Agora sim, a partir de qualquer lugar eu posso inicializar o serviço que eu pre
 
 - `container-stack redis-start`
 - `container-stack some-service-name`
+
+Também posso precisar inicializar uma stack inteira com vários serviços de bancos de dados por exemplo:
+
+- `container-stack db-stack-up`
+
+## Serviços
+
+Os serviços disponíveis podem ser vistos no [Makefile](./Makefile) do projeto.
