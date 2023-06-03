@@ -1,0 +1,57 @@
+version: "3.9"
+services:
+  mysql8:
+    container_name: "mysql-8-service"
+    image: mysql:8.0
+    restart: always
+    env_file:
+      - .env
+    cap_add:
+      - SYS_NICE
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql8-db-data:/var/lib/mysql
+      - ./mysql8/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  postgres:
+    container_name: "postgres-service"
+    image: postgres:latest
+    restart: always
+    env_file:
+      - .env
+    cap_add:
+      - SYS_NICE
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-db-data:/var/lib/postgresql/data
+
+  mssqlserver:
+    container_name: "mssqlserver-service"
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    restart: always
+    platform: linux/x86_64
+    env_file:
+      - .env
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  mysql8-db-data:
+    driver: local
+  postgres-db-data:
+    driver: local
+  sqlserver-data:
+    driver: local
