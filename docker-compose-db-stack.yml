@@ -4,27 +4,25 @@ services:
     container_name: "mysql-8-service"
     image: mysql:8.0
     restart: always
+    tty: true
     env_file:
       - .env
-    cap_add:
-      - SYS_NICE
     environment:
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_HOST=%
     ports:
       - "${DB_PORT_MYSQL}:3306"
     volumes:
       - mysql8-db-data:/var/lib/mysql
-      - ./mysql8/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   postgres:
     container_name: "postgres-service"
     image: postgres:latest
     restart: always
+    tty: true
     env_file:
       - .env
-    cap_add:
-      - SYS_NICE
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -37,6 +35,7 @@ services:
     container_name: "mssqlserver-service"
     image: mcr.microsoft.com/mssql/server:2017-latest
     restart: always
+    tty: true
     platform: linux/x86_64
     env_file:
       - .env
@@ -52,6 +51,7 @@ services:
     container_name: "mongodb-service"
     image: mongodb/mongodb-community-server:6.0-ubi8
     restart: always
+    tty: true
     env_file:
       - .env
     environment:

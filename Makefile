@@ -1,7 +1,7 @@
 RUN=docker run
 STOP=docker stop
-DB_STACK=docker compose -f docker-compose-db-stack.yml
-WEB_STACK=docker compose -f docker-compose-web-stack.yml
+DB_STACK=docker compose -f ${PWD}/docker-compose-db-stack.yml
+WEB_STACK=docker compose -f ${PWD}/docker-compose-web-stack.yml
 
 db-stack-up:
 	@$(DB_STACK) up --build --remove-orphans
