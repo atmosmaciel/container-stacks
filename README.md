@@ -8,22 +8,22 @@ Eu não preciso dessas instalações *stand-alone* na minha máquina local, ent�
 
 ## Como usar isto
 
-Uma das maneiras de usar é entrar diretamente no diretório deste projeto e inicializar o serviço que eu preciso: `make redis-start`
+Uma das maneiras, é entrar diretamente no diretório deste projeto e inicializar o serviço que eu preciso: `make redis-start`.
 
-Isso não é muito produtivo. Então é melhor criar um *alias* para fazer isso:
+Isso não é muito produtivo. Então é melhor criar um *alias* no seu terminal favorito. Para fazer isso, faça:
 
 1. `vim .zshrc`
-2. `alias container-stack="make -f $PWD(ou o caminho para este projeto)/container-stacks/Makefile"`
+2. Faça o `make` olhar para o `Makefile` deste projeto aonde ele estiver: `alias containerstack="make -C caminho/ate/este/projeto/container-stacks"`
 3. `$SHELL`
 
 Agora sim, a partir de qualquer lugar eu posso inicializar o serviço que eu precisar:
 
-- `container-stack redis-start`
-- `container-stack some-service-name`
+- `containerstack redis-start`
+- `containerstack some-service-name`
 
 Também posso precisar inicializar uma stack inteira com vários serviços de bancos de dados por exemplo:
 
-- `container-stack db-stack-up`
+- `containerstack db-stack-up`
 
 ## Serviços
 
