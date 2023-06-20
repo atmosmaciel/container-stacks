@@ -10,13 +10,15 @@ services:
       - .env
     environment:
       - MYSQL_DATABASE=${DB_NAME}
-      - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_ROOT_HOST=%
     ports:
       - "${DB_PORT_MYSQL}:3306"
     volumes:
       - mysql8-db-data:/var/lib/mysql
+    # network_mode: host # Enable this with you want access like host mode.
 
   postgres:
     container_name: "postgres-service"
