@@ -14,19 +14,19 @@ db-stack-stop:
 	@$(DB_STACK) stop -v
 
 mysql8-start:
-	@$(DB_STACK) up -d mysql8
+	@$(DB_STACK) up -d --build --remove-orphans mysql8
 
 mysql8-stop:
 	@$(DB_STACK) stop mysql8
 
 postgres-start:
-	@$(DB_STACK) up -d postgres
+	@$(DB_STACK) up -d --build --remove-orphans postgres
 
 postgres-stop:
 	@$(DB_STACK) stop postgres
 
 mssqlserver-start:
-	@$(DB_STACK) up -d mssqlserver
+	@$(DB_STACK) up -d --build --remove-orphans mssqlserver
 
 mssqlserver-stop:
 	@$(DB_STACK) stop mssqlserver
@@ -50,13 +50,13 @@ redis-stop:
 	@$(STOP) redis-stack-server
 
 mongo-start:
-	@$(DB_STACK) up -d mongodb
+	@$(DB_STACK) up -d --build --remove-orphans mongodb
 
 mongo-stop:
 	@$(DB_STACK) stop mongodb
 
 nginx-start:
-	@$(WEB_STACK) up -d nginx
+	@$(WEB_STACK) up -d --build --remove-orphans nginx
 
 nginx-stop:
 	@$(WEB_STACK) stop nginx
