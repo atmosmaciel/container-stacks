@@ -1,11 +1,20 @@
 RUN=docker run
 START=docker start
 STOP=docker stop
-DB_STACK=docker compose -f ./compose-db-stack.yml
-WEB_STACK=docker compose -f ./compose-web-stack.yml
-PORTAINER=docker compose -f ./compose-portainer.yaml
+DB_STACK=docker compose -p db-stack -f ./compose-db-stack.yml
+WEB_STACK=docker compose -p web-stack -f ./compose-web-stack.yml
+PORTAINER=docker compose -p portainer -f ./compose-portainer.yaml
+NETWORK_NAME=container-stack-network
 
-db-stack-up:
+# Network management
+network-create:
+	@docker network inspect $(NETWORK_NAME) >/dev/null 2>&1 || docker network create $(NETWORK_NAME)
+
+network-remove:
+	@docker network rm $(NETWORK_NAME) 2>/dev/null || true
+
+# Database stack commands
+db-stack-up: network-create
 	@$(DB_STACK) up -d --build --remove-orphans
 
 db-stack-down:
@@ -14,25 +23,26 @@ db-stack-down:
 db-stack-stop:
 	@$(DB_STACK) stop -v
 
-mysql8-start:
-	@$(DB_STACK) up -d --build --remove-orphans mysql8
+mysql-start: network-create
+	@$(DB_STACK) up -d --build --remove-orphans mysql
 
-mysql8-stop:
-	@$(DB_STACK) stop mysql8
+mysql-stop:
+	@$(DB_STACK) stop mysql
 
-postgres-start:
+postgres-start: network-create
 	@$(DB_STACK) up -d --build --remove-orphans postgres
 
 postgres-stop:
 	@$(DB_STACK) stop postgres
 
-mssqlserver-start:
+mssqlserver-start: network-create
 	@$(DB_STACK) up -d --build --remove-orphans mssqlserver
 
 mssqlserver-stop:
 	@$(DB_STACK) stop mssqlserver
 
-portainer-up:
+# Portainer commands
+portainer-up: network-create
 	@$(PORTAINER) up -d --build --remove-orphans
 
 portainer-down:
@@ -44,25 +54,28 @@ portainer-stop:
 portainer-start:
 	@$(PORTAINER) up -d
 
-redis-start:
+# Redis commands
+redis-start: network-create
 	@$(DB_STACK) up -d --build --remove-orphans redis
 
 redis-stop:
 	@$(DB_STACK) stop redis
 
-redis-commander-start:
+redis-commander-start: network-create
 	@$(DB_STACK) up -d --build --remove-orphans redis-commander
 
 redis-commander-stop:
 	@$(DB_STACK) stop redis-commander
 
-mongo-start:
+# MongoDB commands
+mongo-start: network-create
 	@$(DB_STACK) up -d --build --remove-orphans mongodb
 
 mongo-stop:
 	@$(DB_STACK) stop mongodb
 
-nginx-start:
+# Web stack commands
+nginx-start: network-create
 	@$(WEB_STACK) up -d --build --remove-orphans nginx
 
 nginx-stop:

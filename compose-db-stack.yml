@@ -14,17 +14,19 @@ services:
       MYSQL_USER: dev
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ALLOW_EMPTY_PASSWORD: true
-      MYSQL_ROOT_HOST: %
+      MYSQL_ROOT_HOST: "%"
     ports:
       - "${DB_PORT_MYSQL}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - container-stack-network
     # network_mode: host # Enable this with you want access like host mode.
 
   postgres:
     container_name: postgres-db
     hostname: postgres-db
-    image: postgres:latest
+    image: postgres:13-alpine
     restart: always
     tty: true
     env_file:
@@ -37,6 +39,8 @@ services:
       - "${DB_PORT_POSTGRES}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - container-stack-network
 
   mssqlserver:
     container_name: mssqlserver-db
@@ -53,6 +57,8 @@ services:
       - "${DB_PORT_SQLSERVER}:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
+    networks:
+      - container-stack-network
 
   mongodb:
     container_name: mongodb-db
@@ -70,11 +76,13 @@ services:
       - "${DB_PORT_MONGODB}:27017"
     volumes:
       - mongodb_data:/data/db
+    networks:
+      - container-stack-network
 
   redis:
     container_name: redis-db
     hostname: redis-db
-    image: redis:7.2-alpine
+    image: redis:alpine
     restart: always
     tty: true
     env_file:
@@ -84,6 +92,8 @@ services:
     volumes:
       - redis_data:/data
     command: redis-server --save 20 1 --loglevel warning --requirepass ${DB_PASSWORD}
+    networks:
+      - container-stack-network
 
   redis-commander:
     container_name: redis-commander
@@ -94,12 +104,14 @@ services:
     env_file:
       - .env
     environment:
-      REDIS_HOSTS: local:redis-service:6379
+      REDIS_HOSTS: local:redis-db:6379
       REDIS_PASSWORD: ${DB_PASSWORD}
     ports:
       - "${REDIS_COMMANDER_PORT}:8081"
     depends_on:
       - redis
+    networks:
+      - container-stack-network
 
 volumes:
   mysql_data:
@@ -112,3 +124,8 @@ volumes:
     driver: local
   redis_data:
     driver: local
+
+networks:
+  container-stack-network:
+    external: true
+    name: container-stack-network
