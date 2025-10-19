@@ -11,7 +11,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: dev
+      MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ALLOW_EMPTY_PASSWORD: true
       MYSQL_ROOT_HOST: "%"
@@ -32,7 +32,7 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_DB: testdb
+      POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
@@ -47,7 +47,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2017-latest
     restart: always
     tty: true
-    #    platform: linux/x86_64
+    # platform: linux/x86_64
     env_file:
       - .env
     environment:
@@ -69,9 +69,9 @@ services:
     env_file:
       - .env
     environment:
+      MONGO_INITDB_DATABASE: ${DB_NAME}
       MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
-      MONGO_INITDB_DATABASE: ${DB_NAME}
     ports:
       - "${DB_PORT_MONGODB}:27017"
     volumes:
