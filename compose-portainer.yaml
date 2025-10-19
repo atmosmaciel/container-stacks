@@ -15,6 +15,7 @@ services:
 volumes:
   portainer_data:
     name: portainer_data
+    external: true
 
 networks:
   container-stack-network:
