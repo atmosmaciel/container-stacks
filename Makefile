@@ -3,7 +3,7 @@ START=docker start
 STOP=docker stop
 DB_STACK=docker compose -f ./compose-db-stack.yml
 WEB_STACK=docker compose -f ./compose-web-stack.yml
-PORTAINER=docker compose -f ./compose-portainer.yml
+PORTAINER=docker compose -f ./compose-portainer.yaml
 
 db-stack-up:
 	@$(DB_STACK) up -d --build --remove-orphans
@@ -32,14 +32,17 @@ mssqlserver-start:
 mssqlserver-stop:
 	@$(DB_STACK) stop mssqlserver
 
-portainer-run:
-	@$(RUN) -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+portainer-up:
+	@$(PORTAINER) up -d --build --remove-orphans
 
-portainer-start:
-	@$(START) portainer
+portainer-down:
+	@$(PORTAINER) down -v
 
 portainer-stop:
-	@$(STOP) portainer
+	@$(PORTAINER) stop
+
+portainer-start:
+	@$(PORTAINER) up -d
 
 redis-start:
 	@$(DB_STACK) up -d --build --remove-orphans redis

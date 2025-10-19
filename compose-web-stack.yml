@@ -1,7 +1,6 @@
-version: "3.9"
 services:
   nginx:
-    container_name: "nginx-service"
+    container_name: nginx
     image: nginx:alpine
     restart: unless-stopped
     tty: true

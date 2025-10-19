@@ -1,7 +1,7 @@
-version: "3.9"
 services:
-  mysql8:
-    container_name: "mysql-8-service"
+  mysql:
+    container_name: mysql-db
+    hostname: mysql-db
     image: mysql:8.0
     restart: always
     tty: true
@@ -9,38 +9,41 @@ services:
     env_file:
       - .env
     environment:
-      - MYSQL_DATABASE=${DB_NAME}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
-      - MYSQL_ROOT_HOST=%
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_ROOT_HOST: %
     ports:
       - "${DB_PORT_MYSQL}:3306"
     volumes:
-      - mysql8-db-data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     # network_mode: host # Enable this with you want access like host mode.
 
   postgres:
-    container_name: "postgres-service"
+    container_name: postgres-db
+    hostname: postgres-db
     image: postgres:latest
     restart: always
     tty: true
     env_file:
       - .env
     environment:
+      POSTGRES_DB: testdb
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "${DB_PORT_POSTGRES}:5432"
     volumes:
-      - postgres-db-data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
   mssqlserver:
-    container_name: "mssqlserver-service"
+    container_name: mssqlserver-db
     image: mcr.microsoft.com/mssql/server:2017-latest
     restart: always
     tty: true
-    platform: linux/x86_64
+    #    platform: linux/x86_64
     env_file:
       - .env
     environment:
@@ -49,29 +52,63 @@ services:
     ports:
       - "${DB_PORT_SQLSERVER}:1433"
     volumes:
-      - sqlserver-data:/var/opt/mssql
+      - sqlserver_data:/var/opt/mssql
 
   mongodb:
-    container_name: "mongodb-service"
-    image: mongodb/mongodb-community-server:6.0-ubi8
+    container_name: mongodb-db
+    hostname: mongodb-db
+    image: mongo:latest
     restart: always
     tty: true
     env_file:
       - .env
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
-      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DB_NAME}
     ports:
       - "${DB_PORT_MONGODB}:27017"
     volumes:
-      - mongodb-data:/data/db
+      - mongodb_data:/data/db
+
+  redis:
+    container_name: redis-db
+    hostname: redis-db
+    image: redis:7.2-alpine
+    restart: always
+    tty: true
+    env_file:
+      - .env
+    ports:
+      - "${DB_PORT_REDIS}:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${DB_PASSWORD}
+
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: ghcr.io/joeferner/redis-commander:latest
+    restart: always
+    tty: true
+    env_file:
+      - .env
+    environment:
+      REDIS_HOSTS: local:redis-service:6379
+      REDIS_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${REDIS_COMMANDER_PORT}:8081"
+    depends_on:
+      - redis
 
 volumes:
-  mysql8-db-data:
+  mysql_data:
     driver: local
-  postgres-db-data:
+  postgres_data:
     driver: local
-  sqlserver-data:
+  sqlserver_data:
     driver: local
-  mongodb-data:
+  mongodb_data:
+    driver: local
+  redis_data:
     driver: local
