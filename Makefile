@@ -15,7 +15,7 @@ network-remove:
 
 # Database stack commands
 db-stack-up: network-create
-	@$(DB_STACK) up -d --build --remove-orphans
+	@$(DB_STACK) up -d --build
 
 db-stack-down:
 	@$(DB_STACK) down -v
@@ -24,26 +24,26 @@ db-stack-stop:
 	@$(DB_STACK) stop -v
 
 mysql-start: network-create
-	@$(DB_STACK) up -d --build --remove-orphans mysql
+	@$(DB_STACK) up -d --build mysql
 
 mysql-stop:
 	@$(DB_STACK) stop mysql
 
 postgres-start: network-create
-	@$(DB_STACK) up -d --build --remove-orphans postgres
+	@$(DB_STACK) up -d --build postgres
 
 postgres-stop:
 	@$(DB_STACK) stop postgres
 
 mssqlserver-start: network-create
-	@$(DB_STACK) up -d --build --remove-orphans mssqlserver
+	@$(DB_STACK) up -d --build mssqlserver
 
 mssqlserver-stop:
 	@$(DB_STACK) stop mssqlserver
 
 # Portainer commands
 portainer-up: network-create
-	@$(PORTAINER) up -d --build --remove-orphans
+	@$(PORTAINER) up -d --build
 
 portainer-down:
 	@$(PORTAINER) down -v
@@ -56,27 +56,27 @@ portainer-start:
 
 # Redis commands
 redis-start: network-create
-	@$(DB_STACK) up -d --build --remove-orphans redis
+	@$(DB_STACK) up -d --build redis
 
 redis-stop:
 	@$(DB_STACK) stop redis
 
 redis-commander-start: network-create
-	@$(DB_STACK) up -d --build --remove-orphans redis-commander
+	@$(DB_STACK) up -d --build redis-commander
 
 redis-commander-stop:
 	@$(DB_STACK) stop redis-commander
 
 # MongoDB commands
 mongo-start: network-create
-	@$(DB_STACK) up -d --build --remove-orphans mongodb
+	@$(DB_STACK) up -d --build mongodb
 
 mongo-stop:
 	@$(DB_STACK) stop mongodb
 
 # Web stack commands
 nginx-start: network-create
-	@$(WEB_STACK) up -d --build --remove-orphans nginx
+	@$(WEB_STACK) up -d --build nginx
 
 nginx-stop:
 	@$(WEB_STACK) stop nginx
