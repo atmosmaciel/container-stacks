@@ -1,8 +1,9 @@
 RUN=docker run
 START=docker start
 STOP=docker stop
-DB_STACK=docker compose -f ./docker-compose-db-stack.yml
-WEB_STACK=docker compose -f ./docker-compose-web-stack.yml
+DB_STACK=docker compose -f ./compose-db-stack.yml
+WEB_STACK=docker compose -f ./compose-web-stack.yml
+PORTAINER=docker compose -f ./compose-portainer.yml
 
 db-stack-up:
 	@$(DB_STACK) up -d --build --remove-orphans
@@ -40,14 +41,17 @@ portainer-start:
 portainer-stop:
 	@$(STOP) portainer
 
-redis-run:
-	@$(RUN) -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
-
 redis-start:
-	@$(START) redis-stack-server
+	@$(DB_STACK) up -d --build --remove-orphans redis
 
 redis-stop:
-	@$(STOP) redis-stack-server
+	@$(DB_STACK) stop redis
+
+redis-commander-start:
+	@$(DB_STACK) up -d --build --remove-orphans redis-commander
+
+redis-commander-stop:
+	@$(DB_STACK) stop redis-commander
 
 mongo-start:
 	@$(DB_STACK) up -d --build --remove-orphans mongodb
