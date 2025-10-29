@@ -104,7 +104,7 @@ services:
     env_file:
       - .env
     environment:
-      REDIS_HOSTS: local:redis-db:6379
+      REDIS_HOSTS: local:redis-db:${DB_PORT_REDIS}
       REDIS_PASSWORD: ${DB_PASSWORD}
     ports:
       - "${REDIS_COMMANDER_PORT}:8081"
