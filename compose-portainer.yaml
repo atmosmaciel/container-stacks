@@ -9,15 +9,8 @@ services:
     ports:
       - "9443:9443"
       # - "8000:8000"  # Remove if you do not intend to use Edge Agents
-    networks:
-      - container-stack-network
 
 volumes:
   portainer_data:
     name: portainer_data
     external: true
-
-networks:
-  container-stack-network:
-    external: true
-    name: container-stack-network
