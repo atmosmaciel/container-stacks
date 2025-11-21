@@ -19,7 +19,7 @@ services:
       - "${DB_PORT_MYSQL}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-    network_mode: host # Enable this with you want access like host mode.
+    #network_mode: host # Enable this with you want access like host mode.
 
   postgres:
     container_name: postgres-db
@@ -37,7 +37,7 @@ services:
       - "${DB_PORT_POSTGRES}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    network_mode: host # Enable this with you want access like host mode.
+    #network_mode: host # Enable this with you want access like host mode.
 
   mssqlserver:
     container_name: mssqlserver-db
@@ -54,7 +54,7 @@ services:
       - "${DB_PORT_SQLSERVER}:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
-    network_mode: host # Enable this with you want access like host mode.
+    #network_mode: host # Enable this with you want access like host mode.
 
   mongodb:
     container_name: mongodb-db
@@ -72,7 +72,7 @@ services:
       - "${DB_PORT_MONGODB}:27017"
     volumes:
       - mongodb_data:/data/db
-    network_mode: host # Enable this with you want access like host mode.
+    #network_mode: host # Enable this with you want access like host mode.
 
   redis:
     container_name: redis-db
@@ -87,7 +87,7 @@ services:
     volumes:
       - redis_data:/data
     command: redis-server --save 20 1 --loglevel warning --requirepass ${DB_PASSWORD}
-    network_mode: host # Enable this with you want access like host mode.
+    #network_mode: host # Enable this with you want access like host mode.
 
   redis-commander:
     container_name: redis-commander
